@@ -7,16 +7,19 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Bitrix\Main\Type\DateTime;
 
 function exportToExcel($users) {
-    ob_end_clean(); // Очистка буфера
+    ob_end_clean();
 
     if (empty($users)) {
-        die("Нет данных для экспорта.");
+        echo '<div style="padding:20px; text-align:center; font-size:16px;">Нет данных для экспорта. Выбран диапазон дат, для которых нет записей. Пожалуйста, выберите корректный диапазон.</div>';
+        echo '<div style="text-align:center; margin-top:20px;">';
+        echo '<a href="' . htmlspecialchars($_SERVER['HTTP_REFERER'] ?? '/') . '" class="adm-btn">Вернуться назад</a>';
+        echo '</div>';
+        exit;
     }
-
+    
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 
-    // Заголовки колонок
     $sheet->fromArray(
         ['ID', 'Имя', 'Фамилия', 'Email', 'Телефон', 'Дата регистрации'],
         null,
@@ -41,7 +44,6 @@ function exportToExcel($users) {
         $row++;
     }
 
-    // Отдаем файл на скачивание
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment;filename="users.xlsx"');
     header('Cache-Control: max-age=0');

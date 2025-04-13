@@ -12,10 +12,9 @@ class ExportUsersComponent extends CBitrixComponent implements Controllerable
 
     public function executeComponent()
     {
-        // Загружаем необходимые расширения Bitrix
+        // Загрузка расширения Bitrix
         Extension::load("ui.forms");
 
-        // Если запрос экспорта (передан export=Y), обрабатываем сразу
         if (isset($_GET['export']) && $_GET['export'] === 'Y') {
             $filter = [
                 'DATE_FROM' => $_GET['date_from'] ?? '',
@@ -29,8 +28,6 @@ class ExportUsersComponent extends CBitrixComponent implements Controllerable
             exportToExcel($users);
             exit;
         }
-
-        // Если экспорт не запрошен,  выводим шаблон с формой
         $this->includeComponentTemplate();
     }
 
@@ -47,11 +44,11 @@ class ExportUsersComponent extends CBitrixComponent implements Controllerable
             $query['filter']['>=DATE_REGISTER'] = new DateTime($filter['DATE_FROM'] . ' 00:00:00', 'Y-m-d H:i:s');
         }
         if (!empty($filter['DATE_TO'])) {
-            // Добавляем время "23:59:59"
+            
             $query['filter']['<=DATE_REGISTER'] = new DateTime($filter['DATE_TO'] . ' 23:59:59', 'Y-m-d H:i:s');
         }
         if (!empty($filter['ONLY_WITH_PHONE'])) {
-            // Фильтр пользователей, у которых поле PERSONAL_PHONE заполнено
+            // Фильтр пользователей с заполненным телефоном
             $query['filter']['!PERSONAL_PHONE'] = false;
         }
 
