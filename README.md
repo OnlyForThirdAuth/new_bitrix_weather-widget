@@ -8,7 +8,7 @@
 
 1. Скопируйте папку компонента в директорию:
 ```
-/local/components/custom/weather.widget/
+/local/
 ```
 
 2. Подключите компонент через `init.php` с помощью события `OnEpilog`.
